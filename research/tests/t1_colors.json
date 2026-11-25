@@ -1,0 +1,50 @@
+{
+ "size": [
+  640,
+  360
+ ],
+ "bounds": {
+  "left": -16,
+  "right": 16,
+  "bottom": -9,
+  "top": 9
+ },
+ "expressions": [
+  {
+   "id": "T",
+   "latex": "T=0"
+  },
+  {
+   "latex": "\\left|x\\right|>0",
+   "color": "#0b0716",
+   "fillOpacity": "1"
+  },
+  {
+   "latex": "n=\\left[1...12\\right]"
+  },
+  {
+   "latex": "C=\\operatorname{hsv}\\left(30n+60T,0.8,1\\right)"
+  },
+  {
+   "latex": "\\operatorname{polygon}\\left(\\left(2.2k-14.3,0\\right)+\\left(\\cos\\left(\\frac{2\\pi}{5}\\cdot\\left[0...4\\right]+T\\right),\\sin\\left(\\frac{2\\pi}{5}\\cdot\\left[0...4\\right]+T\\right)\\right)\\right)\\operatorname{for}k=\\left[1...12\\right]",
+   "colorLatex": "C",
+   "fillOpacity": "1",
+   "lines": false
+  },
+  {
+   "latex": "\\left(2.2n-14.3,-4\\right)",
+   "colorLatex": "C",
+   "pointSize": "20"
+  },
+  {
+   "latex": "y=0.5\\sin\\left(x+n+3T\\right)+5",
+   "colorLatex": "C",
+   "lineWidth": "3"
+  }
+ ],
+ "clock": {
+  "var": "T",
+  "fps": 2,
+  "seconds": 1
+ }
+}

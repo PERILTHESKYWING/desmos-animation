@@ -1,0 +1,94 @@
+{
+ "size": [
+  960,
+  540
+ ],
+ "bounds": {
+  "left": -16,
+  "right": 16,
+  "bottom": -9,
+  "top": 9
+ },
+ "expressions": [
+  {
+   "id": "T",
+   "latex": "T=0"
+  },
+  {
+   "latex": "\\left|x\\right|>0",
+   "color": "#05010f",
+   "fillOpacity": "1",
+   "lines": false
+  },
+  {
+   "latex": "E\\left(x\\right)=\\left\\{0<x<1:3x^{2}-2x^{3},x\\le0:0,1\\right\\}"
+  },
+  {
+   "latex": "m=E\\left(\\frac{T-0.2}{0.6}\\right)"
+  },
+  {
+   "latex": "A=\\left(-7\\left(1-m\\right),0.6\\sin\\left(9T\\right)\\left(1-m\\right)\\right)"
+  },
+  {
+   "latex": "B=\\left(7\\left(1-m\\right),-0.6\\sin\\left(9T\\right)\\left(1-m\\right)\\right)"
+  },
+  {
+   "latex": "r=\\left[0.05,0.1...1\\right]"
+  },
+  {
+   "latex": "\\operatorname{polygon}\\left(A+\\left(1+3r\\left[k\\right]\\right)\\left(\\cos\\left(\\frac{\\pi}{24}\\cdot\\left[0...47\\right]\\right),\\sin\\left(\\frac{\\pi}{24}\\cdot\\left[0...47\\right]\\right)\\right)\\right)\\operatorname{for}k=\\left[1...20\\right]",
+   "color": "#ff2d3c",
+   "fillOpacity": "0.06",
+   "lines": false
+  },
+  {
+   "latex": "\\operatorname{polygon}\\left(B+\\left(1+3r\\left[k\\right]\\right)\\left(\\cos\\left(\\frac{\\pi}{24}\\cdot\\left[0...47\\right]\\right),\\sin\\left(\\frac{\\pi}{24}\\cdot\\left[0...47\\right]\\right)\\right)\\right)\\operatorname{for}k=\\left[1...20\\right]",
+   "color": "#2d7bff",
+   "fillOpacity": "0.06",
+   "lines": false
+  },
+  {
+   "latex": "\\left(x-A.x\\right)^{2}+\\left(y-A.y\\right)^{2}<1",
+   "color": "#ffd0d4",
+   "fillOpacity": "1",
+   "lines": false
+  },
+  {
+   "latex": "\\left(x-B.x\\right)^{2}+\\left(y-B.y\\right)^{2}<1",
+   "color": "#cfe0ff",
+   "fillOpacity": "1",
+   "lines": false
+  },
+  {
+   "latex": "\\operatorname{polygon}\\left(\\left(0.3+8mr\\left[k\\right]\\right)\\left(\\cos\\left(\\frac{\\pi}{24}\\cdot\\left[0...47\\right]\\right),\\sin\\left(\\frac{\\pi}{24}\\cdot\\left[0...47\\right]\\right)\\right)\\right)\\operatorname{for}k=\\left[1...20\\right]",
+   "color": "#b14dff",
+   "fillOpacity": "0.05m",
+   "lines": false
+  },
+  {
+   "latex": "\\left(1.5m+0\\cdot\\left[1...10\\right]\\right)\\left(\\cos t,\\sin t\\right)",
+   "color": "#e7c6ff",
+   "lineWidth": "6\\cdot\\left[1...10\\right]",
+   "lineOpacity": "0.08",
+   "parametricDomain": {
+    "min": "0",
+    "max": "2\\pi"
+   }
+  },
+  {
+   "latex": "\\left(A.x+\\left(B.x-A.x\\right)t,\\ A.y+\\left(B.y-A.y\\right)t+0.8\\left(1-m\\right)\\sin\\left(\\pi t\\right)\\left(\\operatorname{random}\\left(4,\\operatorname{floor}\\left(30T\\right)\\right)-0.5\\right)\\sin\\left(20t+40T+\\left[1...4\\right]\\right)\\right)",
+   "color": "#ffffff",
+   "lineWidth": "2",
+   "lineOpacity": "0.6",
+   "parametricDomain": {
+    "min": "0",
+    "max": "1"
+   }
+  }
+ ],
+ "clock": {
+  "var": "T",
+  "fps": 30,
+  "seconds": 1
+ }
+}

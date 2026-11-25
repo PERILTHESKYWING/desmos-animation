@@ -4,9 +4,11 @@ Tools and notes for making cinematic animations in the Desmos graphing calculato
 
 ## Status
 
-Milestone 1 (research) is done: four example graphs dissected end to end.
+Milestone 1 (research) is done: four example graphs and the 2022-2025 Math Art galleries dissected, key techniques tested headless.
 
-- `research/lessons.md`: the reusable technique list.
+- `research/techniques.md`: **the technique catalogue** (tested vs seen, costs, Gojo vs Sukuna mapping).
+- `research/lessons.md`: first-pass lessons from the four example graphs.
+- `research/tests/`: scenes that prove each technique renders.
 - `research/dissections/`: one write-up per example graph, with contact sheets.
 - `research/bezier-renderer.md`: notes on DesmosBezierRenderer and its tutorial video.
 
@@ -21,4 +23,13 @@ NODE_PATH=$(npm root -g) node scripts/frames.js bhqh6a0i9g out '[[{"k":1}],[{"k"
 ffmpeg -framerate 30 -i out_%03d.png -pix_fmt yuv420p out.mp4
 ```
 
-`frames.js` loads desmos.com/calculator in headless Chromium (Playwright) and drives the page's `Calc` object.
+```sh
+# Render a scene file (expressions + clock + optional camera) to frames
+NODE_PATH=$(npm root -g) node scripts/render.js research/tests/t2_glow.json out/t2
+
+# Image to filled Desmos polygons, one expression per colour
+pip install potracer opencv-python-headless pillow numpy
+python3 scripts/img2desmos.py pose.png pose.json --colors 8
+```
+
+`render.js` and `frames.js` load desmos.com/calculator in headless Chromium (Playwright) and drives the page's `Calc` object.

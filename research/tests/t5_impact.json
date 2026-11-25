@@ -1,0 +1,54 @@
+{
+ "size": [
+  960,
+  540
+ ],
+ "bounds": {
+  "left": -16,
+  "right": 16,
+  "bottom": -9,
+  "top": 9
+ },
+ "expressions": [
+  {
+   "id": "T",
+   "latex": "T=0"
+  },
+  {
+   "latex": "\\left|x\\right|>0",
+   "color": "#0a0a12",
+   "fillOpacity": "1",
+   "lines": false
+  },
+  {
+   "latex": "E\\left(x\\right)=\\left\\{0<x<1:3x^{2}-2x^{3},x\\le0:0,1\\right\\}"
+  },
+  {
+   "latex": "a=2\\pi\\operatorname{random}\\left(90,\\operatorname{floor}\\left(15T\\right)\\right)"
+  },
+  {
+   "latex": "w=0.02+0.06\\operatorname{random}\\left(90,\\operatorname{floor}\\left(15T\\right)+7\\right)"
+  },
+  {
+   "latex": "r_{0}=3+2\\operatorname{random}\\left(90,5\\right)"
+  },
+  {
+   "latex": "\\operatorname{polygon}\\left(r_{0}\\left[j\\right]\\left(\\cos\\left(a\\left[j\\right]\\right),\\sin\\left(a\\left[j\\right]\\right)\\right),40\\left(\\cos\\left(a\\left[j\\right]-w\\left[j\\right]\\right),\\sin\\left(a\\left[j\\right]-w\\left[j\\right]\\right)\\right),40\\left(\\cos\\left(a\\left[j\\right]+w\\left[j\\right]\\right),\\sin\\left(a\\left[j\\right]+w\\left[j\\right]\\right)\\right)\\right)\\operatorname{for}j=\\left[1...90\\right]",
+   "color": "#ffffff",
+   "fillOpacity": "0.85",
+   "lines": false
+  },
+  {
+   "latex": "\\left|x\\right|>0",
+   "color": "#ffffff",
+   "fillOpacity": "e^{-60\\left(T-0.15\\right)^{2}}",
+   "lines": false
+  }
+ ],
+ "clock": {
+  "var": "T",
+  "fps": 30,
+  "seconds": 1
+ },
+ "camera": "(()=>{const s=0.6*Math.exp(-6*T);const z=1-0.15*Math.min(1,T*3);return {left:-16*z+s*Math.sin(53*T),right:16*z+s*Math.sin(53*T),bottom:-9*z+s*Math.cos(47*T),top:9*z+s*Math.cos(47*T)}})()"
+}

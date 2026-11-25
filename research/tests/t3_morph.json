@@ -1,0 +1,56 @@
+{
+ "size": [
+  960,
+  540
+ ],
+ "bounds": {
+  "left": -16,
+  "right": 16,
+  "bottom": -9,
+  "top": 9
+ },
+ "expressions": [
+  {
+   "id": "T",
+   "latex": "T=0"
+  },
+  {
+   "latex": "\\left|x\\right|>0",
+   "color": "#101018",
+   "fillOpacity": "1",
+   "lines": false
+  },
+  {
+   "latex": "E\\left(x\\right)=\\left\\{0<x<1:3x^{2}-2x^{3},x\\le0:0,1\\right\\}"
+  },
+  {
+   "latex": "N=\\left[0...119\\right]"
+  },
+  {
+   "latex": "P_{1}=\\left(5\\cos\\left(\\frac{2\\pi N}{120}\\right),5\\sin\\left(\\frac{2\\pi N}{120}\\right)\\right)"
+  },
+  {
+   "latex": "P_{2}=\\left(2.5+3.5\\left\\{\\operatorname{mod}\\left(N,24\\right)<12:1,-0.4\\right\\}\\right)\\cdot\\left(\\cos\\left(\\frac{2\\pi N}{120}\\right),\\sin\\left(\\frac{2\\pi N}{120}\\right)\\right)"
+  },
+  {
+   "latex": "u=E\\left(T\\right)"
+  },
+  {
+   "latex": "\\operatorname{polygon}\\left(\\left(1-u\\right)P_{1}+uP_{2}\\right)",
+   "color": "#ffb000",
+   "fillOpacity": "1",
+   "lines": false
+  },
+  {
+   "latex": "\\operatorname{polygon}\\left(\\left(1-u\\right)P_{1}+uP_{2}\\right)",
+   "color": "#000000",
+   "fillOpacity": "0",
+   "lineWidth": "4"
+  }
+ ],
+ "clock": {
+  "var": "T",
+  "fps": 10,
+  "seconds": 1
+ }
+}

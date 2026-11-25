@@ -1,0 +1,41 @@
+{
+ "size": [
+  960,
+  540
+ ],
+ "bounds": {
+  "left": -16,
+  "right": 16,
+  "bottom": -9,
+  "top": 9
+ },
+ "expressions": [
+  {
+   "id": "T",
+   "latex": "T=0"
+  },
+  {
+   "latex": "\\left|x\\right|>0",
+   "color": "#000000",
+   "fillOpacity": "1",
+   "lines": false
+  },
+  {
+   "latex": "R=\\operatorname{random}\\left(2000,1\\right)"
+  },
+  {
+   "latex": "Q=\\operatorname{random}\\left(2000,2\\right)"
+  },
+  {
+   "latex": "\\left(16\\left(2R-1\\right)\\left(0.3+T\\right),9\\left(2Q-1\\right)\\left(0.3+T\\right)\\right)",
+   "colorLatex": "\\operatorname{hsv}\\left(260+60R,0.6,1\\right)",
+   "pointSize": "1+4Q",
+   "pointOpacity": "0.7"
+  }
+ ],
+ "clock": {
+  "var": "T",
+  "fps": 10,
+  "seconds": 0.2
+ }
+}
