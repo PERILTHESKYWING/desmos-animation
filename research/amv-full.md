@@ -13,7 +13,16 @@ Per scene:
    tuned (k, --simplify) until the state is about 3 MB, then `share.js --state`
 6. full-quality still: `share.js scenes/fNNNN.json`
 
+## Style change (XIAO, 2026-11-26)
+The detailed scene-1 version looked too machine-made. From scene 2 on, the style is
+`video_link.py --cel 8` (scripts/cel.py): one palette per shot (8 tones plus up to 2
+vivid accents such as eye glow), mean-shift flattening, soft majority vote on the label
+map, potrace with smooth curves (alphamax 1.0), and ink lines from an adaptive
+threshold drawn on top. That keeps each shot under the 3 MB link limit, and the mp4 is
+rendered from the link itself (`render_link.js`), so the link and the video match.
+
 ## Scenes delivered
 | # | time | content | full-quality PSNR (non-black frames) | links |
 |---|---|---|---|---|
 | 1 | 0:00-0:04 (frames 0-259) | spoiler card, blue flame, red flame, clash, title strobe | 32.4 dB | play https://www.desmos.com/calculator/d46rrgwgp9, still https://www.desmos.com/calculator/qtuxudc33f |
+| 2 | 0:04-0:10 (frames 260-632) | morgue, Gojo close-up, group shot (cel style) | n/a | A https://www.desmos.com/calculator/fk7bbfavlq, B https://www.desmos.com/calculator/2p56jfb0pg, C https://www.desmos.com/calculator/q9kdyg2ifu |

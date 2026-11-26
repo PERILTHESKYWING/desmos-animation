@@ -52,6 +52,7 @@ if __name__ == '__main__':
     ap.add_argument('--simplify', type=float, default=1.0); ap.add_argument('--fps', type=float, default=30)
     ap.add_argument('--width', type=float, default=32); ap.add_argument('--scale', type=float, default=0.5)
     ap.add_argument('--pix', action='store_true', help='integer coords (with --width 960: half-res pixels); about 40%% smaller')
+    ap.add_argument('--cel', type=int, default=0, help='clean flat-colour style with N shot-wide tones + ink lines (scripts/cel.py)')
     ap.add_argument('--dupmap', help='json {frame.png: first identical frame.png}: held drawings are stored once')
     a = ap.parse_args(); PIX = a.pix
     if a.dupmap:
@@ -63,7 +64,20 @@ if __name__ == '__main__':
         files = sorted(glob.glob(os.path.join(a.frames, '*.png')))[::a.step]
         order = list(range(1, len(files) + 1))
     frames = []
-    for f in files:
+    if a.cel:
+        import cel
+        def load(f):
+            im = Image.open(f).convert('RGB')
+            return np.asarray(im.resize((int(im.width * a.scale), int(im.height * a.scale)), Image.LANCZOS))
+        sample = [load(files[i]) for i in np.linspace(0, len(files) - 1, min(8, len(files))).astype(int)]
+        cen = cel.fit_palette(sample, a.cel)
+        for f in files:
+            im = load(f); h, w = im.shape[:2]; s = a.width / w
+            sl, _ = cel.cel_slots(im, cen, lambda x: fmt((x - w / 2) * s, a.width / 2), lambda y: fmt((y - h / 2) * s, a.width * h / w / 2),
+                                  simplify=a.simplify)
+            frames.append(sl or [(cel.rgb(cen)[0], None)]); print(len(frames), len(sl), flush=True)
+        img = Image.open(files[-1])
+    for f in ([] if a.cel else files):
         img = Image.open(f).convert('RGB')
         full = np.asarray(img)
         # frames that are mostly one flat colour (logo on black) keep full resolution:
