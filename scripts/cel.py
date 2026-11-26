@@ -68,10 +68,23 @@ def accent_masks(img, cen, k):
         out.append((col.astype(np.uint8), b))
     return out
 
-def ink(img, block=15, C=10, dark=120, min_px=25):
-    """Dark ink lines: pixels clearly darker than their surroundings."""
+def ink(img, block=15, C=18, min_px=30, min_len=12):
+    """Ink lines: pixels clearly darker than their neighbourhood (works for grey
+    pencil on white as well as black ink), kept only in stroke-like pieces so that
+    ground texture and film grain do not turn into speckles."""
     g = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    m = (cv2.adaptiveThreshold(g, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, block, C) > 0) & (g < dark)
+    m = cv2.adaptiveThreshold(g, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, block, C) > 0
+    # drop thick dark blobs (a shadow core inside hair is a fill, not a line)
+    m &= ~(cv2.morphologyEx(m.astype(np.uint8), cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))) > 0)
+    n, cc, st, _ = cv2.connectedComponentsWithStats(m.astype(np.uint8), 8)
+    keep = np.zeros(n, bool)
+    keep[1:] = (st[1:, cv2.CC_STAT_AREA] >= min_px) & (np.maximum(st[1:, cv2.CC_STAT_WIDTH], st[1:, cv2.CC_STAT_HEIGHT]) >= min_len)
+    return keep[cc]
+
+def light_ink(img, thr=70, C=25, min_px=4):
+    """Bright strokes on a dark ground: pixels well above their neighbourhood and above thr."""
+    g = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    m = (cv2.adaptiveThreshold(g, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 15, -C) > 0) & (g > thr)
     n, cc, st, _ = cv2.connectedComponentsWithStats(m.astype(np.uint8), 8)
     keep = np.zeros(n, bool); keep[1:] = st[1:, cv2.CC_STAT_AREA] >= min_px
     return keep[cc]
@@ -80,6 +93,10 @@ def labels(img, cen, soft=2.5):
     """Fill label map over the shot's tones (accents are drawn separately)."""
     L = cv2.cvtColor(flatten(img), cv2.COLOR_RGB2LAB).reshape(-1, 3).astype(np.float32)
     lab = ((L[:, None] - cen[None]) ** 2).sum(-1).argmin(1).reshape(img.shape[:2])
+    # two near-black tones read as one black to the eye; splitting them draws rings in dark hair
+    order = np.argsort(cen[:, 0])
+    for a, b in zip(order[:-1], order[1:]):
+        if cen[b, 0] < 30 and np.sqrt(((cen[a] - cen[b]) ** 2).sum()) < 30: lab[lab == b] = a
     # soft majority: blur each class mask, keep the strongest -> smooth, speckle-free borders
     votes = np.stack([cv2.GaussianBlur((lab == c).astype(np.float32), (0, 0), soft) for c in range(len(cen))])
     return merge_islands(votes.argmax(0), cen)
@@ -91,13 +108,18 @@ def merge_islands(lab, cen, passes=3):
     L = cen[:, 0]
     dist = np.sqrt(((cen[:, None] - cen[None]) ** 2).sum(-1))
     h, w = lab.shape
+    # letterbox bars count as frame edge, so a shape is not 'touching the edge' through them
+    top = bot = 0
+    while top < h // 4 and np.bincount(lab[top]).max() > 0.98 * w: top += 1
+    while bot < h // 4 and np.bincount(lab[h - 1 - bot]).max() > 0.98 * w: bot += 1
     for _ in range(passes):
         changed = False
         for c in range(len(cen)):
-            n, cc, st, _ = cv2.connectedComponentsWithStats((lab == c).astype(np.uint8), 8)
+            m = (lab == c).astype(np.uint8); m[:top] = 0; m[h - bot:] = 0
+            n, cc, st, _ = cv2.connectedComponentsWithStats(m, 8)
             for i in range(1, n):
                 x, y, bw, bh, area = st[i]
-                if x == 0 or y == 0 or x + bw >= w or y + bh >= h or area > 0.25 * h * w: continue
+                if x == 0 or y <= top or x + bw >= w or y + bh >= h - bot or area > 0.25 * h * w: continue
                 sub = (slice(max(0, y - 3), y + bh + 3), slice(max(0, x - 3), x + bw + 3))
                 b = (cc[sub] == i).astype(np.uint8)
                 ring = (cv2.dilate(b, np.ones((5, 5), np.uint8)) > 0) & (b == 0)
@@ -120,6 +142,12 @@ def cel_slots(img, cen, fmtx, fmty, turd=40, alphamax=1.0, simplify=1.0, lines=T
     preview = pal[lab].copy()
     for col, m in accent_masks(img, cen, k):
         layers.append((col, m, 4, 1.0)); preview[m] = col
+    dark = np.argmin(cen[:k, 0])
+    if (lab == dark).mean() > 0.85:  # mostly-black frame: keep small bright detail (credits text, distant lights)
+        m = light_ink(img)
+        if m.sum():
+            col = pal[np.argmin(((cen[:k] - cv2.cvtColor(img[m].reshape(1, -1, 3), cv2.COLOR_RGB2LAB).reshape(-1, 3).astype(np.float32).mean(0)) ** 2).sum(1))]
+            layers.append((col, m, 2, 0.8)); preview[m] = col
     if lines:  # ink on top, in the shot's darkest tone
         m = ink(img); col = pal[np.argmin(cen[:, 0])]
         layers.append((col, m, 6, 0.8)); preview[m] = col

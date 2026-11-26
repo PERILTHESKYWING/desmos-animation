@@ -24,6 +24,7 @@ const fs = require('fs'); const path = require('path');
   const t0 = Date.now(); let rendered = 0;
   for (let k = 1; k <= M; k++) {
     const dst = path.join(out, `k${String(k).padStart(4, '0')}.png`);
+    if (fs.existsSync(dst) && fs.statSync(dst).size > 0) continue;  // resume
     if (first[U[k - 1]] !== k) { fs.copyFileSync(path.join(out, `k${String(first[U[k - 1]]).padStart(4, '0')}.png`), dst); continue; }
     rendered++;
     const uri = await page.evaluate(async ({ k, mb, W, H }) => {
