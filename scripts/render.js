@@ -63,7 +63,7 @@ const fs = require('fs'); const path = require('path');
     const uri = await page.evaluate(async ({ T, clock, cam, W, H }) => {
       if (clock.var) Calc.setExpression({ id: clock.var, latex: `${clock.var}=${T.toFixed(5)}` });
       if (cam) Calc.setMathBounds((new Function('T', 'return ' + cam))(T));
-      return await new Promise(r => Calc.asyncScreenshot({ width: W, height: H, targetPixelRatio: 1, mode: 'stretch' }, r));
+      return await new Promise(r => Calc.asyncScreenshot({ width: W, height: H, targetPixelRatio: 1, mode: 'stretch', mathBounds: Calc.graphpaperBounds.mathCoordinates }, r));
     }, { T, clock, cam: scene.camera, W, H });
     fs.writeFileSync(`${outPrefix}_${String(i).padStart(4, '0')}.png`, Buffer.from(uri.split(',')[1], 'base64'));
     times.push(Date.now() - t1);
