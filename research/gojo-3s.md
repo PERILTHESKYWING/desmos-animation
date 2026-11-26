@@ -35,3 +35,10 @@ node scripts/share.js scenes/f0030.json                    # full-quality snapsh
   drop the underlay when one flat colour covers most of the frame (predicted 41 dB).
 - Desmos resizes the viewport to keep a square aspect ratio, so capture with explicit
   `mathBounds`, never the graph's current viewport.
+
+## Links (desmos.com snapshots, no account)
+- Playable 3 s cut (60 frames, 20 fps): https://www.desmos.com/calculator/qfmffgdg4g
+- Full-quality frames: 3 https://www.desmos.com/calculator/tgbbvgk51e, 30 https://www.desmos.com/calculator/3bgkkvijzr,
+  65 https://www.desmos.com/calculator/pmpxnwo8ls, 100 https://www.desmos.com/calculator/99d5mc56zg,
+  150 https://www.desmos.com/calculator/dpdm7xjrft, 176 https://www.desmos.com/calculator/qazdl08rop
+- Earlier tests: glow orbs https://www.desmos.com/calculator/o0l73b4j28, impact frame https://www.desmos.com/calculator/pjhfm0y4qc
