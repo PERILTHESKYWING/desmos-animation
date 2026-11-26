@@ -70,11 +70,11 @@ if __name__ == '__main__':
             im = Image.open(f).convert('RGB')
             return np.asarray(im.resize((int(im.width * a.scale), int(im.height * a.scale)), Image.LANCZOS))
         sample = [load(files[i]) for i in np.linspace(0, len(files) - 1, min(8, len(files))).astype(int)]
-        cen = cel.fit_palette(sample, a.cel)
+        cen, ntones = cel.fit_palette(sample, a.cel)
         for f in files:
             im = load(f); h, w = im.shape[:2]; s = a.width / w
             sl, _ = cel.cel_slots(im, cen, lambda x: fmt((x - w / 2) * s, a.width / 2), lambda y: fmt((y - h / 2) * s, a.width * h / w / 2),
-                                  simplify=a.simplify)
+                                  simplify=a.simplify, k=ntones)
             frames.append(sl or [(cel.rgb(cen)[0], None)]); print(len(frames), len(sl), flush=True)
         img = Image.open(files[-1])
     for f in ([] if a.cel else files):
