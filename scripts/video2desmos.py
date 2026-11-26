@@ -157,6 +157,14 @@ def convert_frame(img, width, target, maxk, detail, cols_list=(160, 240)):
         exprs, pts, _ = grid_layers(img, gcols, width)
         return exprs, dict(method='grid', cols=gcols, points=pts, psnr=gp)
     _, k, lab, pal, p = best
+    # one flat colour covering most of the frame (line art on black): the grid
+    # underlay would put a grey halo round thin strokes, so use a flat fill there
+    cnt = np.bincount(lab.ravel(), minlength=len(pal)); dom = cnt.argmax()
+    rest = (lab != dom).astype(np.uint8)
+    thin = rest.sum() and cv2.erode(rest, np.ones((5, 5), np.uint8)).sum() < 0.4 * rest.sum()
+    if cnt[dom] > 0.6 * lab.size and thin:  # line art (strokes under ~5 px), not glows
+        exprs, pts = trace_layers(lab, pal, width, detail, turdsize=4)
+        return exprs, dict(method='trace-flat', k=k, points=pts, psnr=p)
     under, upts, _ = grid_layers(img, 240, width)
     exprs, pts = trace_layers(lab, pal, width, detail, turdsize=4, underlay=under)
     pts += upts
